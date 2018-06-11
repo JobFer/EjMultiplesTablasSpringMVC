@@ -1,0 +1,54 @@
+Basado en el vídeo:
+https://www.youtube.com/watch?v=USlwAUhvLa8	
+52:09	Ejemplo Spring MVC + JPA Entity (Base de datos)
+
+SI FUNCIONA!! (por causa del jndi. Faltaba una referencia a la PU en en web.xml) Usa EclipseLink (Mejor otro vídeo que use Hibernate, P.EJ, EL QUE ESTÁ EN LA FILA "ZZ" DE ESTE EXCEL)
+
+De momento, sólo en Netbeans, porque en Eclipse (o STS), el plugin que crea un proyecto SPRING MVC lo hace con MAVEN, y ahora no tengo internet (en Santiago)
+
+Primero crea la BD: Alumno----1:N----Fono
+5:20 -> Crea el proyecto WEB: EjMultiplesTablasSpringMVC (Spring MVC 4.0.1)
+7:40 -> Siempre empezar a programar por la BD
+
+NOTA: En 8:00 dice que hay otro vídeo donde hizo DTOs
+
+8:25 -> Entity classes from database (pero en vez de List, Collection)
+13:35 -> Netbeans crea autom. la PU de JPA (y EclipseLink). Sin esto, para hacerlo a mano, había que usar el patrón DAO, el patrón SINGLETON, una clase Conexion, métodos SINCRONIZED...
+
+14:35 -> Ahora rellena el applicationContext.xml con lo anterior:
+        <jee:jndi-lookup id="myEmf" jndi-name="persistence/EjMultiplesTablasSpringMVCPU"/>
+        <tx:jta-transaction-manager/>
+14:55 -> Es necesario añadirle un xmlns: xmlns:jee (En Eclipse -o STS-, esto se hace con checkboxes)
+15:50 -> También hay que añadir 2 xmlns y algunas líneas más en el dispatcher-servlet.xml
+16:50 -> Crea los otros paquetes java: modelo (para los DAO: AlumnoDao y ServicioException) y controlador.
+18:55 -> Crea AlumnoDao
+19:40 -> Explica el DAO y el DTO
+
+(sigue en la celda de al lado)
+
+22:44 -> Crea el método CREATE
+26:15 -> Limitaciones de este JPA: 
+ - No hay un método FINDALL
+ - PERSIST no devuelve nada para saber si se ha insertado bien o no
+
+27:55 -> Hace 2 métodos para FIND: uno con el método por defecto, y otro con JPQL
+29:10 -> Explica que JPQL hace querys sobre las clases (objetos), y todo lo que se haga sobre ellos, se hace sobre las tablas.
+Entonces, si se cambia la BD (mysql, oracle, sqlserver,...), no hace falta cambiar el código (si lo hubiésemos hecho con sql, sí habría que cambiar algunas cosas)
+34:50 -> Crea el readAll (con JPQL)
+35:55 -> Crea un método que busca un registro, pero devuelve un boolean (dependiendo si lo encuentra o no)
+37:50 -> Crea otro método CREATE pero devolviendo un boolean (si el objeto ya existía, devuelve false porque no va a ser posible crearlo)
+
+41:32 -> Explicación sobre la inyección de dependencias.
+43:25 -> Crea un método para obtener la lista de teléfonos de un alumno.
+46:00 -> El fonos.jsp
+47:14 -> Explica la relación 1-N entre Alumno y Fono
+48:23 -> Ejecutar  => SI FUNCIONA!! (por el jndi. Faltaba la referencia a la PU en el web.xml)
+
+50:45 -> Si queremos incluir la sesión, sólo hay que añadir el parámetro "HttpServletRequest request" en el método "mostrarAlumno" del controller "LeerFonos" (sólo ahí, en ningún otro sitio)
+
+(sigue en la celda de al lado)
+
+He hecho una modificación (sacada de google) en el fichero applicationContext.xml, y con eso sí que ha desplegado, pero al ejecutar da un error de casting bastante incomprensible:
+"cannot cast entidades.Alumno to entidades.Alumno"
+Con esto NO FUNCIONA!!
+
